@@ -7,7 +7,7 @@
 --[Hemort] NVARCHAR (max) not null
 --)
 
---INSERT INTO KlassenDb ([Id],[Förnamn],[Efternamn],[Ålder],[Hemort])
---VALUES (5,'Christoffer','Nordqvist',28,'Kungälv');
+INSERT INTO KlassenDb ([Id],[Förnamn],[Efternamn],[Ålder],[Hemort])
+VALUES (6,'Arvid','Anderson',22,'Borås');
 
 
