@@ -84,9 +84,73 @@ USE everyloop;
 
 --2.1----------------------------------------------------------------------------------------------------------------------------
 
+--SELECT
+--	TOP 1
+--	music.artists.Name AS Artist,
+--	SUM(music.tracks.Milliseconds) as Milliseconds
+--	--music.genres.Name AS Genre
+--FROM music.albums
+--	JOIN music.tracks ON music.tracks.AlbumId = music.albums.AlbumId
+--	JOIN music.artists ON music.artists.ArtistId = music.albums.ArtistId
+--	JOIN music.genres ON music.genres.GenreId = music.tracks.GenreId
+--WHERE 
+--	music.genres.Name NOT LIKE 'TV Shows' 
+--	AND music.genres.Name NOT LIKE 'Drama' 
+--	AND music.genres.Name NOT LIKE 'Sci Fi & Fantasy' 
+--	AND music.genres.Name NOT LIKE 'Comedy'
+--	AND music.genres.Name NOT LIKE 'Science Fiction'
+--	AND music.genres.Name NOT LIKE 'Soundtrack'
+--GROUP BY music.artists.Name
+--ORDER BY SUM(music.tracks.Milliseconds) DESC
+
+--2.2----------------------------------------------------------------------------------------------------------------------------
+
+
+--SELECT
+--	music.artists.Name AS Artist,
+--	RIGHT(CAST(DATEADD(ms, AVG(music.tracks.Milliseconds), '00:00') AS time(0)),5) AS [LENGTH]
+--FROM music.albums
+--	JOIN music.tracks ON music.tracks.AlbumId = music.albums.AlbumId
+--	JOIN music.artists ON music.artists.ArtistId = music.albums.ArtistId
+--	JOIN music.genres ON music.genres.GenreId = music.tracks.GenreId
+--WHERE music.artists.Name LIKE 'Iron Maiden'
+--GROUP BY music.artists.Name
+
+
+--2.3----------------------------------------------------------------------------------------------------------------------------
+
+
+--SELECT 
+--CONCAT(CAST(SUM(ROUND( music.tracks.Bytes/1048576.0,2 )) AS numeric(36)), ' MB') AS [SIZE]
+--FROM music.tracks
+--WHERE music.tracks.MediaTypeId = 3
+
+
+--2.4----------------------------------------------------------------------------------------------------------------------------
+
+
+--SELECT TOP 1
+--	COUNT(DISTINCT music.artists.Name) AS 'Number of artists',
+--	music.playlists.Name AS Playlist
+--FROM music.playlists
+--	JOIN music.playlist_track ON music.playlist_track.PlaylistId = music.playlists.PlaylistId
+--	JOIN music.tracks ON music.tracks.TrackId = music.playlist_track.TrackId
+--	JOIN music.albums ON music.albums.AlbumId = music.tracks.AlbumId
+--	JOIN music.artists ON music.artists.ArtistId = music.albums.ArtistId
+--GROUP BY music.playlists.Name
+--ORDER BY COUNT( music.artists.Name) DESC
+
+
+--2.5----------------------------------------------------------------------------------------------------------------------------
+
+
 SELECT
-	music.artists.Name AS Artist,
-	music.tracks.Milliseconds
-FROM music.albums
-	JOIN music.tracks ON music.tracks.AlbumId = music.albums.AlbumId
-	JOIN music.artists ON music.artists.ArtistId = music.tracks.AlbumId
+	AVG(COUNT(DISTINCT music.artists.Name)) AS 'Average number of artists',
+	music.playlists.Name
+FROM music.playlists
+	JOIN music.playlist_track ON music.playlist_track.PlaylistId = music.playlists.PlaylistId
+	JOIN music.tracks ON music.tracks.TrackId = music.playlist_track.TrackId
+	JOIN music.albums ON music.albums.AlbumId = music.tracks.AlbumId
+	JOIN music.artists ON music.artists.ArtistId = music.albums.ArtistId
+GROUP BY music.playlists.Name
+ORDER BY AVG(COUNT(music.artists.Name)) DESC
